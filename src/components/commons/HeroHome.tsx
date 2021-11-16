@@ -21,10 +21,10 @@ const HeroHome: React.FC<HeroHomeProps> = (props) => {
 		<Wrapper>
 			<ImageWrapper>
 				<BackgroundWrapper>
-					<Image layout="responsive" alt="" src={imageURL} />
+					<Image layout="responsive" alt="" src={imageURL} priority />
 				</BackgroundWrapper>
 				<LogoWrapper>
-					<Image layout="fill" alt="Recipe Finder" src={logoURL} objectFit="contain" />
+					<Image layout="fill" alt="Recipe Finder" src={logoURL} priority objectFit="contain" />
 				</LogoWrapper>
 			</ImageWrapper>
 		</Wrapper>

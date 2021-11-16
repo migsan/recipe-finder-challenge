@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, useContext, useEffect } from 'react'
 
 import { RecipeType } from '~/api/@types/RecipeCustom'
-import { getRandomRecipe } from '~/api'
+import { API } from '~/api'
 
 export enum ActionTypes {
 	Error = 'ERROR',
@@ -35,9 +35,15 @@ const resultsInitialState: ResultsStateType = {
  */
 const fetchRandomRecipes = async () => {
 	const RECIPES_SIZE = 5
+
+	// Included downlevelIteration in tsconfig to allow for range creation
 	const range = [...Array(RECIPES_SIZE).keys()]
 
-	const recipes = await Promise.all(range.map(() => getRandomRecipe()))
+	const recipes = await Promise.all(
+		range.map((_, index) => {
+			return API.getRandomRecipe()
+		})
+	)
 
 	return recipes
 }

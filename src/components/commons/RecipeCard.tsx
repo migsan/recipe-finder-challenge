@@ -3,6 +3,8 @@ import styled from '@emotion/styled'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { mq } from '~/styles/utils/media'
+
 import ImageWrapper from '~/components/commons/ImageWrapper'
 import { heading1Style } from '~/components/commons/Typography'
 
@@ -38,6 +40,19 @@ const RecipeCard: React.FC<RecipeCardProps> = (props) => {
 const Wrapper = styled.div`
 	width: 100%;
 	padding: ${({ theme }) => theme.spacing.inner} 0;
+
+	${mq('lg')`
+		img {
+			filter: brightness(0.7);
+			transition: filter 0.3s ease;
+		}
+
+		&:hover {
+			img {
+				filter: brightness(1);
+			}
+		}
+	`}
 `
 
 const Title = styled.span`

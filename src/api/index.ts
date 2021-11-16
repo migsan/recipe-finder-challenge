@@ -17,82 +17,85 @@ const instance = axios.create({
 	timeout: 5000,
 })
 
-/**
- * @returns One random recipe from The Meal DB
- */
-export const getRandomRecipe = async (): Promise<RecipeType> => {
-	try {
-		const response = await instance.get<RandomMealResponse>(Endpoints.Random)
+export namespace API {
+	/**
+	 * @returns One random recipe from The Meal DB
+	 */
+	export const getRandomRecipe = async (): Promise<RecipeType> => {
+		// FIXME: Review and correct bug for duplicated recipes in Safari only.
+		try {
+			const response = await instance.get<RandomMealResponse>(Endpoints.Random)
 
-		if (response === null) {
-			throw Error('Failed to fetch random meal data')
+			if (response === null) {
+				throw Error('Failed to fetch random meal data')
+			}
+
+			const randomSingleMeal = response.data.meals[0]
+
+			const cleanRecipe = parseRecipe(randomSingleMeal)
+
+			return cleanRecipe
+		} catch (error) {
+			console.error(error)
+			throw new Error('Get Random Recipe Failed')
 		}
-
-		const randomSingleMeal = response.data.meals[0]
-
-		const cleanRecipe = parseRecipe(randomSingleMeal)
-
-		return cleanRecipe
-	} catch (error) {
-		console.error(error)
-		throw new Error('Get Random Recipe Failed')
 	}
-}
 
-/**
- * @returns Recipe Details for a single Recipe
- */
-export const getRecipeById = async (recipeId: string): Promise<RecipeType> => {
-	try {
-		const config = {
-			params: {
-				i: recipeId,
-			},
+	/**
+	 * @returns Recipe Details for a single Recipe
+	 */
+	export const getRecipeById = async (recipeId: string): Promise<RecipeType> => {
+		try {
+			const config = {
+				params: {
+					i: recipeId,
+				},
+			}
+			const response = await instance.get<RandomMealResponse>(Endpoints.Detail, config)
+
+			if (response === null) {
+				throw Error('Failed to fetch meal details data')
+			}
+
+			const randomSingleMeal = response.data.meals[0]
+
+			const cleanRecipe = parseRecipe(randomSingleMeal)
+
+			return cleanRecipe
+		} catch (error) {
+			console.error(error)
+			throw new Error('Get Recipe By Id Failed')
 		}
-		const response = await instance.get<RandomMealResponse>(Endpoints.Detail, config)
-
-		if (response === null) {
-			throw Error('Failed to fetch meal details data')
-		}
-
-		const randomSingleMeal = response.data.meals[0]
-
-		const cleanRecipe = parseRecipe(randomSingleMeal)
-
-		return cleanRecipe
-	} catch (error) {
-		console.error(error)
-		throw new Error('Get Recipe By Id Failed')
 	}
-}
 
-/**
- * @returns Search Recipes by Name
- */
-export const getRecipesByName = async (query: string): Promise<RecipeType[] | []> => {
-	try {
-		const config = {
-			params: {
-				s: query,
-			},
+	/**
+	 * @returns Search Recipes by Name
+	 */
+	export const getRecipesByName = async (query: string): Promise<RecipeType[] | []> => {
+		try {
+			const config = {
+				params: {
+					s: query,
+				},
+			}
+			const response = await instance.get<SearchMealsResponse>(Endpoints.Search, config)
+
+			if (response === null) {
+				throw Error(`Failed to fetch meals by name ${query}`)
+			}
+
+			const foundMeals = response.data.meals
+
+			if (!foundMeals) {
+				return []
+			}
+
+			const cleanRecipes = parseMultipleRecipes(foundMeals)
+
+			return cleanRecipes
+		} catch (error) {
+			console.error(error)
+			throw new Error('Get Recipes By Name Failed')
 		}
-		const response = await instance.get<SearchMealsResponse>(Endpoints.Search, config)
-
-		if (response === null) {
-			throw Error(`Failed to fetch meals by name ${query}`)
-		}
-
-		const foundMeals = response.data.meals
-
-		if (!foundMeals) {
-			return []
-		}
-
-		const cleanRecipes = parseMultipleRecipes(foundMeals)
-
-		return cleanRecipes
-	} catch (error) {
-		console.error(error)
-		throw new Error('Get Recipes By Name Failed')
 	}
 }

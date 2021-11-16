@@ -30,12 +30,20 @@ const Nav: React.FC<NavProps> = (props) => {
 
 			{handleFavoriteClick &&
 				(isFavorited ? (
-					<FavoriteButton aria-label="Remove from Favorites" onClick={handleFavoriteClick}>
+					<FavoriteButton
+						title="Remove from Favorites"
+						aria-label="Remove from Favorites"
+						onClick={handleFavoriteClick}
+					>
 						{/* "far" style of the fontAwesome icon doesn't work with Individual Imports */}
 						<Icon icon={faHeartBroken} size="sm" color={theme.colors.button.primary} />
 					</FavoriteButton>
 				) : (
-					<FavoriteButton aria-label="Add to Favorites" onClick={handleFavoriteClick}>
+					<FavoriteButton
+						title="Add to Favorites"
+						aria-label="Add to Favorites"
+						onClick={handleFavoriteClick}
+					>
 						<Icon icon={faHeart} size="sm" color={theme.colors.secondary} />
 					</FavoriteButton>
 				))}

@@ -2,7 +2,7 @@ import React from 'react'
 import Head from 'next/head'
 
 import { RecipeType } from '~/api/@types/RecipeCustom'
-import { getRecipeById } from '~/api'
+import { API } from '~/api'
 
 import { useFavoritesContext, FavoritesActionTypes } from '~/contexts/FavoritesContext'
 import { isAlreadyStored } from '~/utils'
@@ -62,7 +62,7 @@ export async function getServerSideProps(props: any) {
 		query: { id },
 	} = props
 
-	const recipeDetails = await getRecipeById(id)
+	const recipeDetails = await API.getRecipeById(id)
 
 	return {
 		props: {

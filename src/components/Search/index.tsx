@@ -83,6 +83,7 @@ const Search: React.FC<SearchProps> = () => {
 	return (
 		<>
 			<FloatingButtonSearch
+				title="Open Search"
 				onClick={() => handleSearchToggle(SearchToggleActions.Open)}
 				aria-label="Open Search"
 			>
@@ -100,6 +101,7 @@ const Search: React.FC<SearchProps> = () => {
 			<Modal isOpen={modalsContext?.state.isSearchModalOpen ?? false}>
 				<SearchWrapper>
 					<BackButton
+						title="Close Search"
 						onClick={() => handleSearchToggle(SearchToggleActions.Close)}
 						aria-label="Close Search"
 					>

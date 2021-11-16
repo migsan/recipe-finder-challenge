@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, useContext, useEffect } from 'react'
 
 import { RecipeType } from '~/api/@types/RecipeCustom'
-import { getRecipesByName } from '~/api'
+import { API } from '~/api'
 
 export enum SearchActionTypes {
 	Error = 'ERROR',
@@ -42,7 +42,7 @@ const resultsInitialState: SearchStateType = {
  * @returns Array of clean recipe objetcs based on query
  */
 const fetchSearchResults = async (query: string) => {
-	const recipes = await getRecipesByName(query)
+	const recipes = await API.getRecipesByName(query)
 
 	return recipes
 }
