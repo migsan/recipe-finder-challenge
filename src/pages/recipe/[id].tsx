@@ -4,6 +4,9 @@ import Head from 'next/head'
 import { RecipeType } from '~/api/@types/RecipeCustom'
 import { getRecipeById } from '~/api'
 
+import { useFavoritesContext, FavoritesActionTypes } from '~/contexts/FavoritesContext'
+import { isAlreadyStored } from '~/utils'
+
 import Nav from '~/components/Nav'
 import HeroDetail from '~/components/commons/HeroDetail'
 import RecipeDetails from '~/components/RecipeDetails/RecipeDetails'
@@ -17,23 +20,39 @@ interface RecipeDetailProps {
 // ReceipeDetail Page ------
 
 const ReceipeDetail = (props: RecipeDetailProps) => {
-	const {
-		recipeDetails: { title, image, instructions, ingredients },
-	} = props
+	const { recipeDetails } = props
+
+	const favoritesContext = useFavoritesContext()
+
+	const isFavorited = isAlreadyStored(favoritesContext?.state.recipes || [], recipeDetails)
+
+	const handleFavoriteClick = () => {
+		if (favoritesContext) {
+			favoritesContext.dispatch({
+				type: FavoritesActionTypes.UpdateFavorite,
+				payload: {
+					recipes: [recipeDetails],
+				},
+			})
+		}
+	}
 
 	return (
 		<>
 			<Head>
-				<title>{title}</title>
+				<title>{recipeDetails.title}</title>
 				<meta name="description" content="Recipe Finder Challenge" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<Nav />
+			<Nav handleFavoriteClick={handleFavoriteClick} isFavorited={isFavorited} />
 
-			<HeroDetail title={title} imageURL={image} />
+			<HeroDetail title={recipeDetails.title} imageURL={recipeDetails.image} />
 
-			<RecipeDetails ingredients={ingredients} instructions={instructions} />
+			<RecipeDetails
+				ingredients={recipeDetails.ingredients}
+				instructions={recipeDetails.instructions}
+			/>
 		</>
 	)
 }

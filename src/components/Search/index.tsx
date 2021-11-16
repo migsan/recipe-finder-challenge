@@ -5,12 +5,14 @@ import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faHeart } from '@fortawesome/free-solid-svg-icons'
 
 import { useSearchContext, SearchActionTypes } from '~/contexts/SearchContext'
 import { useModalsContext, ModalsActionTypes } from '~/contexts/ModalsContext'
+import { useFavoritesContext } from '~/contexts/FavoritesContext'
 
 import theme from '~/styles/theme'
+import { mq } from '~/styles/utils/media'
 import { bodyStyle } from '~/components/commons/Typography'
 
 // Types ----------
@@ -31,6 +33,7 @@ enum SearchToggleActions {
 const Search: React.FC<SearchProps> = () => {
 	const searchContext = useSearchContext()
 	const modalsContext = useModalsContext()
+	const favoritesContext = useFavoritesContext()
 
 	const updateValue = debounce((value) => {
 		if (searchContext) {
@@ -74,14 +77,25 @@ const Search: React.FC<SearchProps> = () => {
 		)
 	})
 
+	const hasFavorites =
+		favoritesContext && favoritesContext.state.recipes && favoritesContext.state.recipes.length > 0
+
 	return (
 		<>
-			<FloatingButton
+			<FloatingButtonSearch
 				onClick={() => handleSearchToggle(SearchToggleActions.Open)}
 				aria-label="Open Search"
 			>
 				<Icon icon={faSearch} size="sm" color={theme.colors.secondary} />
-			</FloatingButton>
+			</FloatingButtonSearch>
+
+			{hasFavorites && (
+				<Link href="/favorites" passHref>
+					<FloatingButtonFavorites>
+						<Icon icon={faHeart} size="sm" color={theme.colors.secondary} />
+					</FloatingButtonFavorites>
+				</Link>
+			)}
 
 			<Modal isOpen={modalsContext?.state.isSearchModalOpen ?? false}>
 				<SearchWrapper>
@@ -120,20 +134,39 @@ const Modal = styled.div<ModalProps>`
 	${({ isOpen }) => isOpen && openModalStyles}
 `
 
-const FloatingButton = styled.button`
+const floatingButtonStyle = css`
 	align-items: center;
-	background-color: ${({ theme }) => theme.colors.button.primary};
+	background-color: ${theme.colors.button.primary};
 	border-radius: 50%;
 	border: 0;
-	bottom: 15px;
 	display: flex;
 	filter: drop-shadow(5px 5px 5px ${theme.colors.contrast});
 	height: 60px;
 	justify-content: center;
 	position: fixed;
 	right: 15px;
+	transition: transform 0.3s ease-in;
 	width: 60px;
 	z-index: 5;
+
+	${mq('lg')`
+		&:hover {
+			cursor: pointer;
+			transform: scale(1.2);
+		}
+	`}
+`
+
+const FloatingButtonSearch = styled.button`
+	${floatingButtonStyle}
+
+	bottom: 15px;
+`
+
+const FloatingButtonFavorites = styled.a`
+	${floatingButtonStyle}
+
+	bottom: 90px;
 `
 
 const SearchWrapper = styled.div`
@@ -163,6 +196,13 @@ const Result = styled.li`
 	display: inline-block;
 	padding: ${({ theme }) => theme.spacing.inner};
 	width: 100%;
+
+	${mq('lg')`
+		&:hover {
+			cursor: pointer;
+			text-decoration: underline;
+		}
+	`}
 `
 
 const LinkElement = styled.a``
@@ -181,6 +221,14 @@ const BackButton = styled.button`
 	height: 40px;
 	justify-content: center;
 	width: 40px;
+	transition: transform 0.3s ease-in;
+
+	${mq('lg')`
+		&:hover {
+			cursor: pointer;
+			transform: scale(1.2);
+		}
+	`}
 `
 
 const Input = styled.input`

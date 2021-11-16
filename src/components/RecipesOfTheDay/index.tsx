@@ -7,13 +7,9 @@ import SectionWrapper from '~/components/commons/SectionWrapper'
 import { breadcrumbStyle } from '~/components/commons/Typography'
 import RecipesList from '~/components/commons/RecipesList'
 
-// Types ----------
-
-interface RecipesOfTheDayProps {}
-
 // RecipesOfTheDay ------
 
-const RecipesOfTheDay: React.FC<RecipesOfTheDayProps> = (props) => {
+const RecipesOfTheDay: React.FC = () => {
 	const resultsState = useRandomContext()
 
 	return (
@@ -22,6 +18,7 @@ const RecipesOfTheDay: React.FC<RecipesOfTheDayProps> = (props) => {
 				<Title>Recipes of the day</Title>
 
 				<Results>
+					{/* TODO: Add Card Skeleton loader while loading */}
 					{resultsState?.isLoading && <span>Loading...</span>}
 
 					{!resultsState?.isLoading && resultsState?.recipes && (

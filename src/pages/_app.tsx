@@ -5,6 +5,7 @@ import globalStyles from '~/styles/global'
 import theme from '~/styles/theme'
 
 import { SearchRecipesContextProvider } from '~/contexts/SearchContext'
+import { FavoritesContextProvider } from '~/contexts/FavoritesContext'
 import { ModalsContextProvider } from '~/contexts/ModalsContext'
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -12,11 +13,13 @@ function MyApp({ Component, pageProps }: AppProps) {
 		<>
 			{globalStyles}
 			<SearchRecipesContextProvider>
-				<ModalsContextProvider>
-					<ThemeProvider theme={theme}>
-						<Component {...pageProps} />
-					</ThemeProvider>
-				</ModalsContextProvider>
+				<FavoritesContextProvider>
+					<ModalsContextProvider>
+						<ThemeProvider theme={theme}>
+							<Component {...pageProps} />
+						</ThemeProvider>
+					</ModalsContextProvider>
+				</FavoritesContextProvider>
 			</SearchRecipesContextProvider>
 		</>
 	)

@@ -1,5 +1,7 @@
 import React from 'react'
-import styled from '@emotion/styled'
+
+import FavoritesList from '~/components/FavoritesList'
+import Nav from '~/components/Nav'
 
 // Types ----------
 
@@ -10,18 +12,11 @@ interface ComponentProps {}
 const Component: React.FC<ComponentProps> = (props) => {
 	return (
 		<>
-			<StyledElement>Your Favorites</StyledElement>
+			<Nav />
+			<FavoritesList />
 		</>
 	)
 }
-
-// Styles ---------
-
-const StyledElement = styled.div(
-	({ theme }) => `
-    font-family: ${theme.font.display};
-  `
-)
 
 // Export ---------
 
