@@ -1,10 +1,17 @@
 import React from 'react'
 import debounce from 'lodash/debounce'
+import Link from 'next/link'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 import { useSearchContext, SearchActionTypes } from '~/contexts/SearchContext'
 import { useModalsContext, ModalsActionTypes } from '~/contexts/ModalsContext'
+
+import theme from '~/styles/theme'
+import { bodyStyle } from '~/components/commons/Typography'
 
 // Types ----------
 
@@ -12,6 +19,11 @@ interface SearchProps {}
 
 type ModalProps = {
 	isOpen: boolean
+}
+
+enum SearchToggleActions {
+	Open = 'Open',
+	Close = 'Close',
 }
 
 // Search ------
@@ -39,31 +51,50 @@ const Search: React.FC<SearchProps> = () => {
 		}
 	}
 
-	const handleSearchOpen = () => {
+	const handleSearchToggle = (action: SearchToggleActions) => {
+		const shouldOpen = action === SearchToggleActions.Open
+
 		modalsContext?.dispatch({
 			type: ModalsActionTypes.SetSearchModal,
 			payload: {
-				isSearchModalOpen: true,
+				isSearchModalOpen: shouldOpen,
 			},
 		})
 	}
 
 	const hasResults = searchContext && searchContext.state && searchContext.state.recipes.length > 0
 
+	const resultsList = searchContext?.state.recipes.map((recipe, index: number) => {
+		return (
+			<Link key={`search-result-${index}`} href={`/recipe/${recipe.id}`} passHref>
+				<LinkElement>
+					<Result>{recipe.title}</Result>
+				</LinkElement>
+			</Link>
+		)
+	})
+
 	return (
 		<>
-			<FloatingButton onClick={handleSearchOpen} />
+			<FloatingButton
+				onClick={() => handleSearchToggle(SearchToggleActions.Open)}
+				aria-label="Open Search"
+			>
+				<Icon icon={faSearch} size="sm" color={theme.colors.secondary} />
+			</FloatingButton>
 
 			<Modal isOpen={modalsContext?.state.isSearchModalOpen ?? false}>
 				<SearchWrapper>
+					<BackButton
+						onClick={() => handleSearchToggle(SearchToggleActions.Close)}
+						aria-label="Close Search"
+					>
+						<Icon icon={faArrowLeft} size="sm" color={theme.colors.secondary} />
+					</BackButton>
 					<Input type="search" placeholder="I'm craving..." onChange={handleInputChange} />
 				</SearchWrapper>
 
-				{hasResults && (
-					<ResultsWrapper>
-						<pre>{JSON.stringify(searchContext.state.recipes, null, 2)}</pre>
-					</ResultsWrapper>
-				)}
+				{hasResults && <ResultsWrapper>{resultsList}</ResultsWrapper>}
 			</Modal>
 		</>
 	)
@@ -90,35 +121,82 @@ const Modal = styled.div<ModalProps>`
 `
 
 const FloatingButton = styled.button`
+	align-items: center;
 	background-color: ${({ theme }) => theme.colors.button.primary};
-	border: 0;
 	border-radius: 50%;
-	bottom: 20px;
-	display: block;
-	height: 40px;
+	border: 0;
+	bottom: 15px;
+	display: flex;
+	filter: drop-shadow(5px 5px 5px ${theme.colors.contrast});
+	height: 60px;
+	justify-content: center;
 	position: fixed;
-	right: 20px;
-	width: 40px;
+	right: 15px;
+	width: 60px;
 	z-index: 5;
 `
 
-const SearchWrapper = styled.div(
-	({ theme }) => `
-    background-color: ${theme.colors.contrast};
-    height: 60px;
-    width: 100%;
-  `
-)
+const SearchWrapper = styled.div`
+	align-items: center;
+	background-color: ${({ theme }) => theme.colors.contrast};
+	display: flex;
+	flex-wrap: nowrap;
+	/* TODO: Height of the Nav. Move to theme variable */
+	height: 60px;
+	padding: 0 ${({ theme }) => theme.spacing.gutter};
+	width: 100%;
+`
 
-const ResultsWrapper = styled.div(
-	({ theme }) => `
-    background-color: ${theme.colors.secondary};
-    height: 60px;
-    width: 100%;
-  `
-)
+const ResultsWrapper = styled.ul`
+	background-color: ${({ theme }) => theme.colors.secondary};
+	display: block;
+	/* TODO: 60 Height of the Nav. Move to theme variable */
+	height: calc(100% - 60px);
+	overflow-y: scroll;
+	padding: ${({ theme }) => theme.spacing.inner} 0;
+	width: 100%;
+`
 
-const Input = styled.input``
+const Result = styled.li`
+	${bodyStyle}
+
+	display: inline-block;
+	padding: ${({ theme }) => theme.spacing.inner};
+	width: 100%;
+`
+
+const LinkElement = styled.a``
+
+const Icon = styled(FontAwesomeIcon)`
+	display: block;
+	height: 30px;
+	width: 30px;
+`
+
+const BackButton = styled.button`
+	align-items: center;
+	background-color: ${({ theme }) => theme.colors.contrast};
+	border: 0;
+	display: flex;
+	height: 40px;
+	justify-content: center;
+	width: 40px;
+`
+
+const Input = styled.input`
+	${bodyStyle}
+
+	background-color: ${({ theme }) => theme.colors.contrast};
+	color: ${({ theme }) => theme.colors.secondary};
+	width: calc(100% - 30px);
+	height: 100%;
+	border: 0;
+	padding: ${({ theme }) => theme.spacing.inner};
+
+	&::-webkit-search-cancel-button {
+		display: none;
+	}
+`
 
 // Export ---------
 

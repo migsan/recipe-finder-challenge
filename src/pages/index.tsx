@@ -6,6 +6,10 @@ import { RandomRecipesContextProvider } from '~/contexts/RandomContext'
 
 import RecipesOfTheDay from '~/components/RecipesOfTheDay'
 import Search from '~/components/Search'
+import HeroHome from '~/components/commons/HeroHome'
+
+import backgroundImage from '../../public/images/hero_image.jpeg'
+import logoImage from '../../public/images/logo.png'
 
 // Home Page ---------
 
@@ -17,6 +21,8 @@ const Home: NextPage = () => {
 				<meta name="description" content="Recipe Finder Challenge" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
+
+			<HeroHome imageURL={backgroundImage} logoURL={logoImage} />
 
 			<RandomRecipesContextProvider>
 				<RecipesOfTheDay />

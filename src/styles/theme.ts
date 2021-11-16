@@ -21,9 +21,17 @@ const colorTheme = {
 	},
 }
 
+const spacing = {
+	inner: '20px',
+	push: '40px',
+	gutter: '20px',
+	list: '10px',
+}
+
 const theme = {
 	font: typography,
 	colors: colorTheme,
+	spacing: spacing,
 }
 
 export default theme

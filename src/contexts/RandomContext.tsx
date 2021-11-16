@@ -61,6 +61,7 @@ export const RandomRecipesContextProvider: React.FC = ({ children }) => {
 	const [state, dispatch] = useReducer(reducer, resultsInitialState)
 
 	useEffect(() => {
+		// TODO: Store recipes in the browser to improve performance and reduce API calls.
 		const getRandomRecipes = async () => {
 			dispatch({
 				type: ActionTypes.FetchRandom,
@@ -76,6 +77,7 @@ export const RandomRecipesContextProvider: React.FC = ({ children }) => {
 			})
 		}
 
+		// TODO: Check for recipes in the browser and avoid calling the API
 		getRandomRecipes()
 	}, [])
 

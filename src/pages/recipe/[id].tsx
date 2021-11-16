@@ -4,6 +4,10 @@ import Head from 'next/head'
 import { RecipeType } from '~/api/@types/RecipeCustom'
 import { getRecipeById } from '~/api'
 
+import Nav from '~/components/Nav'
+import HeroDetail from '~/components/commons/HeroDetail'
+import RecipeDetails from '~/components/RecipeDetails/RecipeDetails'
+
 // Types --------------
 
 interface RecipeDetailProps {
@@ -24,7 +28,12 @@ const ReceipeDetail = (props: RecipeDetailProps) => {
 				<meta name="description" content="Recipe Finder Challenge" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<h1>{title}</h1>
+
+			<Nav />
+
+			<HeroDetail title={title} imageURL={image} />
+
+			<RecipeDetails ingredients={ingredients} instructions={instructions} />
 		</>
 	)
 }

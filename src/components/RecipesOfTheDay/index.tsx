@@ -3,6 +3,10 @@ import styled from '@emotion/styled'
 
 import { useRandomContext } from '~/contexts/RandomContext'
 
+import SectionWrapper from '~/components/commons/SectionWrapper'
+import { breadcrumbStyle } from '~/components/commons/Typography'
+import RecipesList from '~/components/commons/RecipesList'
+
 // Types ----------
 
 interface RecipesOfTheDayProps {}
@@ -13,24 +17,37 @@ const RecipesOfTheDay: React.FC<RecipesOfTheDayProps> = (props) => {
 	const resultsState = useRandomContext()
 
 	return (
-		<>
-			{resultsState?.isLoading ? (
-				<h1>Loading...</h1>
-			) : (
-				<pre>{JSON.stringify(resultsState?.recipes, null, 2)}</pre>
-				// <span>results</span>
-			)}
-		</>
+		<Wrapper>
+			<SectionWrapper>
+				<Title>Recipes of the day</Title>
+
+				<Results>
+					{resultsState?.isLoading && <span>Loading...</span>}
+
+					{!resultsState?.isLoading && resultsState?.recipes && (
+						<RecipesList recipes={resultsState.recipes} />
+					)}
+				</Results>
+			</SectionWrapper>
+		</Wrapper>
 	)
 }
 
 // Styles ---------
 
-const StyledElement = styled.div(
-	({ theme }) => `
-    font-family: ${theme.font.display};
-  `
-)
+const Wrapper = styled.main``
+
+const Title = styled.h1`
+	${breadcrumbStyle}
+
+	margin: 0 0 ${({ theme }) => theme.spacing.push};
+	text-align: center;
+	width: 100%;
+`
+
+const Results = styled.div`
+	width: 100%;
+`
 
 // Export ---------
 

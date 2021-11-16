@@ -39,7 +39,7 @@ export const ModalsContextProvider: React.FC = ({ children }) => {
 	return <ModalsContext.Provider value={{ state, dispatch }}>{children}</ModalsContext.Provider>
 }
 
-// Search by Name Context Provider
+// Modals State Context
 
 export const useModalsContext = () => {
 	const contextValue = useContext(ModalsContext)

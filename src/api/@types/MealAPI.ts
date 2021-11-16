@@ -6,7 +6,7 @@ export type MealAPIObject = {
 	strArea: string
 	strInstructions: string
 	strMealThumb: string
-	strTags: string
+	strTags: any
 	strYoutube: string
 	strIngredient1: string | null
 	strIngredient2: string | null
