@@ -1,6 +1,5 @@
 import React from 'react'
-
-import styled from '@emotion/styled'
+import Head from 'next/head'
 
 import { RecipeType } from '~/api/@types/RecipeCustom'
 import { getRecipeById } from '~/api'
@@ -11,7 +10,7 @@ interface RecipeDetailProps {
 	recipeDetails: RecipeType
 }
 
-// ReceipeDetail ------
+// ReceipeDetail Page ------
 
 const ReceipeDetail = (props: RecipeDetailProps) => {
 	const {
@@ -20,18 +19,15 @@ const ReceipeDetail = (props: RecipeDetailProps) => {
 
 	return (
 		<>
+			<Head>
+				<title>{title}</title>
+				<meta name="description" content="Recipe Finder Challenge" />
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
 			<h1>{title}</h1>
 		</>
 	)
 }
-
-// Styles ---------
-
-const StyledElement = styled.div(
-	({ theme }) => `
-    font-family: ${theme.font.display};
-  `
-)
 
 export async function getServerSideProps(props: any) {
 	const {

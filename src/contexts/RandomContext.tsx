@@ -6,7 +6,6 @@ import { getRandomRecipe } from '~/api'
 export enum ActionTypes {
 	Error = 'ERROR',
 	FetchRandom = 'FETCH_RANDOM',
-	FetchResults = 'FETCH_RESULTS',
 	Success = 'SUCCESS',
 }
 
@@ -30,6 +29,10 @@ const resultsInitialState: ResultsStateType = {
 	recipes: [],
 }
 
+/**
+ * Retrieve and parse 5 meals from the API
+ * @returns Array of 5 Clean recipe objetcs
+ */
 const fetchRandomRecipes = async () => {
 	const RECIPES_SIZE = 5
 	const range = [...Array(RECIPES_SIZE).keys()]
@@ -39,13 +42,11 @@ const fetchRandomRecipes = async () => {
 	return recipes
 }
 
-const ResultsContext = createContext<ResultsStateType | null>(null)
+const RandomRecipesContext = createContext<ResultsStateType | null>(null)
 
 const reducer = (state: ResultsStateType, action: ResultsActions): ResultsStateType => {
 	switch (action.type) {
 		case ActionTypes.FetchRandom:
-			return { ...state, isLoading: true }
-		case ActionTypes.FetchResults:
 			return { ...state, isLoading: true }
 		case ActionTypes.Success:
 			return { ...state, isLoading: false, recipes: action.payload!.recipes }
@@ -56,10 +57,8 @@ const reducer = (state: ResultsStateType, action: ResultsActions): ResultsStateT
 	}
 }
 
-export const ResultsContextProvider: React.FC = ({ children }) => {
+export const RandomRecipesContextProvider: React.FC = ({ children }) => {
 	const [state, dispatch] = useReducer(reducer, resultsInitialState)
-
-	const { isLoading } = state
 
 	useEffect(() => {
 		const getRandomRecipes = async () => {
@@ -80,14 +79,16 @@ export const ResultsContextProvider: React.FC = ({ children }) => {
 		getRandomRecipes()
 	}, [])
 
-	return <ResultsContext.Provider value={state}>{children}</ResultsContext.Provider>
+	return <RandomRecipesContext.Provider value={state}>{children}</RandomRecipesContext.Provider>
 }
 
-export const useResultsContext = () => {
-	const contextValue = useContext(ResultsContext)
+// Search by Name Context Provider
+
+export const useRandomContext = () => {
+	const contextValue = useContext(RandomRecipesContext)
 
 	if (contextValue === undefined) {
-		throw new Error('Expected a ResultsContext in the React tree to set the context value')
+		throw new Error('Expected a RandomRecipesContext in the React tree to set the context value')
 	}
 
 	return contextValue

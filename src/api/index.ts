@@ -14,7 +14,7 @@ enum Endpoints {
 // Instantiate Axios with the base API URL
 const instance = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_MEAL_API_URL,
-	timeout: 2000,
+	timeout: 5000,
 })
 
 /**
@@ -69,7 +69,7 @@ export const getRecipeById = async (recipeId: string): Promise<RecipeType> => {
 /**
  * @returns Search Recipes by Name
  */
-export const getRecipesByName = async (query: string): Promise<RecipeType[] | null> => {
+export const getRecipesByName = async (query: string): Promise<RecipeType[] | []> => {
 	try {
 		const config = {
 			params: {
@@ -85,7 +85,7 @@ export const getRecipesByName = async (query: string): Promise<RecipeType[] | nu
 		const foundMeals = response.data.meals
 
 		if (!foundMeals) {
-			return null
+			return []
 		}
 
 		const cleanRecipes = parseMultipleRecipes(foundMeals)

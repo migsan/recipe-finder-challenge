@@ -1,13 +1,15 @@
 import React from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-// import Image from 'next/image'
 
-import { useResultsContext } from '~/contexts/ResultsContext'
+import { RandomRecipesContextProvider } from '~/contexts/RandomContext'
+
+import RecipesOfTheDay from '~/components/RecipesOfTheDay'
+import Search from '~/components/Search'
+
+// Home Page ---------
 
 const Home: NextPage = () => {
-	const resultsState = useResultsContext()
-
 	return (
 		<div>
 			<Head>
@@ -16,11 +18,11 @@ const Home: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			{resultsState?.isLoading ? (
-				<h1>Loading...</h1>
-			) : (
-				<pre>{JSON.stringify(resultsState?.recipes, null, 2)}</pre>
-			)}
+			<RandomRecipesContextProvider>
+				<RecipesOfTheDay />
+			</RandomRecipesContextProvider>
+
+			<Search />
 		</div>
 	)
 }

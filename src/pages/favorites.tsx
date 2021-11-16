@@ -10,7 +10,7 @@ interface ComponentProps {}
 const Component: React.FC<ComponentProps> = (props) => {
 	return (
 		<>
-			<StyledElement>Example text</StyledElement>
+			<StyledElement>Your Favorites</StyledElement>
 		</>
 	)
 }

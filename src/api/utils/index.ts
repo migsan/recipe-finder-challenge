@@ -15,7 +15,7 @@ const parseIngredients = (recipe: MealAPIObject) => {
 	const entries = Object.entries(recipe)
 
 	const ingredientEntries = entries.filter(
-		(entry) => entry[0].indexOf(INGREDIENT_PREFIX) > -1 && entry[1] !== ''
+		(entry) => entry[0].indexOf(INGREDIENT_PREFIX) > -1 && entry[1] !== '' && entry[1] !== null
 	)
 	const measureEntries = entries.filter(
 		(entry) => entry[0].indexOf(MEASURE_PREFIX) > -1 && entry[1] !== ''
