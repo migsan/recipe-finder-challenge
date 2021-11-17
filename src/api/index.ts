@@ -22,9 +22,16 @@ export namespace API {
 	 * @returns One random recipe from The Meal DB
 	 */
 	export const getRandomRecipe = async (): Promise<RecipeType> => {
-		// FIXME: Review and correct bug for duplicated recipes in Safari only.
+		// Adding random unique param to try to bypass Safari not calling
+		// the request multiple times
+		const config = {
+			params: {
+				unique: `${Date.now()}-${Math.trunc(Math.random() * 100000)}`,
+			},
+		}
+
 		try {
-			const response = await instance.get<RandomMealResponse>(Endpoints.Random)
+			const response = await instance.get<RandomMealResponse>(Endpoints.Random, config)
 
 			if (response === null) {
 				throw Error('Failed to fetch random meal data')
